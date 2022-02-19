@@ -1,6 +1,7 @@
 import re
 import csv
 
+# Регулярные выражения для преобразования записи номера телефона
 phone_pattern = r'(\+7|8)\s*(\s?\()*(\d{3})[\s\)-]*(\d{3})[\)\s-]*(\d{2})[-]*(\d{2})[\s\(]*(доб\.)*[\s]*(\d+)*[\)]*'
 phone_sub = r'+7(\3)\4-\5-\6 \7\8'
 
@@ -10,24 +11,11 @@ def main_func(phonebook_list):
     """Функция для приведения справочника к стандартному формату (ФИО к Ф+И+О и номера к +7(999)999-99-99 доб.9999)"""
     new_list = list()
     for item in phonebook_list:
-        # print(item)
-        # print('1_______________')
-        # print(item[:3])
-        # print('2_______________')
         full_name = ' '.join(item[:3]).split(' ')
-        # print(full_name)
-        # print('3_______________')
         result = [full_name[0], full_name[1], full_name[2], item[3], item[4],
                   re.sub(phone_pattern, phone_sub, item[5]),
                   item[6]]
         new_list.append(result)
-        # print(full_name[0])
-        # print(full_name[1])
-        # print(full_name[2])
-        # print(item[3])
-        # print(item[4])
-        # print(item[5])
-        # print(item[6])
     return string_join(new_list)
 
 
@@ -65,12 +53,13 @@ def string_join(contacts):
 
 if __name__ == '__main__':
 
+    # код для чтения исходного файла справочника в формате CSV
     with open("phonebook_raw.csv", encoding="utf-8") as f:
         rows = csv.reader(f, delimiter=",")
         contacts_list = list(rows)
 
     # TODO 2: сохраните получившиеся данные в другой файл
-    # код для записи файла в формате CSV
+    # код для записи итового файла справочника в формате CSV
     with open("phonebook.csv", "w", encoding="utf-8") as f:
         datawriter = csv.writer(f, delimiter=',')
         datawriter.writerows(main_func(contacts_list))
